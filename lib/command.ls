@@ -7,6 +7,7 @@ require! \chokidar
 require! \glob
 require! \co
 require! \livescript
+Module = (require \module).Module
 
 # -----------------------------------------------------------------------------
 # Global assignments.  Please keep all global assignments within this area.
@@ -45,7 +46,9 @@ task-modules = pairs-to-obj (((glob.sync "#{process.cwd!}/node_modules/mix*/task
 
 # Print list of tasks if none given, or task does not exist.
 if !mix.task.0 or !task-modules[camelize mix.task.0]
-  exit 'No tasks defined' if !(keys task-modules).length
+  if !(keys task-modules).length
+    info 'No tasks defined'
+    process.exit!
   info 'Tasks:'
   keys task-modules |> each -> info "  #it"
   process.exit!

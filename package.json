@@ -14,6 +14,10 @@
   },
   "dependencies": {
     "chokidar": "^1.4.2",
-    "livescript": "^1.4.0"
+    "co": "^4.6.0",
+    "glob": "^6.0.4",
+    "livescript": "^1.4.0",
+    "optimist": "^0.6.1",
+    "prelude-ls": "^1.1.2"
   }
 }
