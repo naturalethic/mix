@@ -1,0 +1,19 @@
+{
+  "name": "mix",
+  "version": "0.0.1",
+  "directories": {
+    "bin": "./bin"
+  },
+  "files": [
+    "lib",
+    "bin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/naturalethic/mix"
+  },
+  "dependencies": {
+    "chokidar": "^1.4.2",
+    "livescript": "^1.4.0"
+  }
+}
