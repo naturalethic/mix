@@ -13,6 +13,8 @@ Module = (require \module).Module
 # Global assignments.  Please keep all global assignments within this area.
 # -----------------------------------------------------------------------------
 
+array-replace = (it, a, b) -> index = it.index-of(a); it.splice(index, 1, b) if index > -1; it
+
 process <<< child_process
 global  <<< console
 global  <<< prelude-ls
@@ -24,12 +26,15 @@ global <<< do
   livescript:    livescript
   watcher:       chokidar
 
-global.exec = (command) ->
+global.exec = (command, options) ->
   process.exec-sync command .to-string!
 
-global.spawn = ->
-  words = it.match(/[^"'\s]+|"[^"]+"|'[^'']+'/g)
-  process.spawn-sync (head words), (tail words), stdio: \inherit
+global.spawn = (command, options = {}) ->
+  options.stdio ?= \inherit
+  new Promise (resolve, reject) ->
+    words = command.match(/[^"'\s]+|"[^"]+"|'[^'']+'/g)
+    process.spawn (head words), (tail words), options
+    .on \close, resolve
 
 global.mix =
   task: [last((delete optimist.argv.$0).split ' ')] ++ delete optimist.argv._
@@ -84,6 +89,5 @@ else if mix.option.supervised
   watcher.watch (task-module.watch or []), persistent: true, ignore-initial: true .on 'all', (event, path) ->
     info "Change detected in '#path'..."
     process.exit!
-  co task
-else
-  co task
+co task
+.catch -> error it.stack
