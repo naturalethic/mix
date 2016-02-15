@@ -6,7 +6,11 @@ require! \optimist
 require! \chokidar
 require! \glob
 require! \co
+require! \clone
+require! \deep-extend
+require! \node-uuid
 require! \livescript
+require! \bluebird
 Module = (require \module).Module
 
 # -----------------------------------------------------------------------------
@@ -22,7 +26,14 @@ global  <<< prelude-ls
 global <<< do
   co:            co
   fs:            fs <<< { path: path }
+  uuid:          node-uuid.v4
   glob:          glob
+  extend:        deep-extend
+  clone:         clone
+  Promise:       bluebird
+  promise:       bluebird
+  promisify:     bluebird.promisify
+  promisify-all: bluebird.promisify-all
   livescript:    livescript
   watcher:       chokidar
 
@@ -37,8 +48,39 @@ global.spawn = (command, options = {}) ->
     .on \close, resolve
 
 global.mix =
-  task: [last((delete optimist.argv.$0).split ' ')] ++ delete optimist.argv._
+  config:
+    color: true
+  task:   [last((delete optimist.argv.$0).split ' ')] ++ delete optimist.argv._
   option: pairs-to-obj(obj-to-pairs(optimist.argv) |> map -> [camelize(it[0]), it[1]])
+
+if fs.exists-sync (config-path = "#{process.cwd!}/mix.ls")
+  extend mix.config, require config-path
+
+if fs.exists-sync (host-path = "#{process.cwd!}/host.ls")
+  extend mix.config, require host-path
+
+global.color = (c, v) -> (mix.config.color and "\x1b[38;5;#{c}m#{v}\x1b[0m") or v
+
+global.debounce = ->
+  return if &.length < 1
+  wait = 1
+  if is-type \Function &0
+    func = &0
+  else
+    wait = &0
+  if &.length > 1
+    if is-type \Function &1
+      func = &1
+    else
+      wait = &1
+  timeout = null
+  ->
+    args = arguments
+    clear-timeout timeout
+    timeout := set-timeout (~>
+      timeout := null
+      func.apply this, args
+    ), wait
 
 # -----------------------------------------------------------------------------
 # End global assignments.

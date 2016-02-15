@@ -13,10 +13,14 @@
     "url": "git://github.com/naturalethic/mix"
   },
   "dependencies": {
+    "bluebird": "^3.3.1",
     "chokidar": "^1.4.2",
+    "clone": "^1.0.2",
     "co": "^4.6.0",
+    "deep-extend": "^0.4.1",
     "glob": "^6.0.4",
     "livescript": "^1.4.0",
+    "node-uuid": "^1.4.7",
     "optimist": "^0.6.1",
     "prelude-ls": "^1.1.2"
   }
