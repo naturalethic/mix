@@ -132,4 +132,4 @@ else if mix.option.supervised
     info "Change detected in '#path'..."
     process.exit!
 co task
-.catch -> error it.stack
+.catch -> error it
