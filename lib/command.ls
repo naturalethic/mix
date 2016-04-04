@@ -10,6 +10,7 @@ require! \clone
 require! \deep-extend
 require! \node-uuid
 require! \livescript
+require! \cli-spinner
 require! \bluebird
 Module = (require \module).Module
 
@@ -36,6 +37,18 @@ global <<< do
   promisify-all: bluebird.promisify-all
   livescript:    livescript
   watcher:       chokidar
+
+global.spin = (command, line) ->*
+  spinner = new cli-spinner.Spinner "#line %s"
+  spinner.start!
+  if command
+    yield ex command
+    spinner.stop true
+    info line if line
+  spinner.done = ->
+    spinner.stop true
+    info line if line
+  spinner
 
 global.ex = (command, options) ->
   new Promise (resolve, reject) ->
