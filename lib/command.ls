@@ -38,7 +38,7 @@ global <<< do
   livescript:    livescript
   watcher:       chokidar
 
-global.spin = (command, line) ->*
+global.spin = (line, command) ->*
   spinner = new cli-spinner.Spinner "#line %s"
   spinner.start!
   if command
