@@ -133,4 +133,4 @@ else if mix.option.supervised
     process.exit!
 co task
 .catch ->
-  error it.stack or it
+  error (it.stack or it)
