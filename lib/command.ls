@@ -37,6 +37,12 @@ global <<< do
   livescript:    livescript
   watcher:       chokidar
 
+global.ex = (command, options) ->
+  new Promise (resolve, reject) ->
+    process.exec command, (error, result) ->
+      return reject error if error
+      resolve result.to-string!
+
 global.exec = (command, options) ->
   process.exec-sync command .to-string!
 
