@@ -32,7 +32,7 @@ global <<< do
   extend:        deep-extend
   clone:         clone
   Promise:       bluebird
-  promise:       bluebird
+  promise:       -> new Promise ...&
   promisify:     bluebird.promisify
   promisify-all: bluebird.promisify-all
   livescript:    livescript
