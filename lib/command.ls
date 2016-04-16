@@ -150,6 +150,7 @@ else if mix.option.supervised
   watcher.watch (task-module.watch or []), persistent: true, ignore-initial: true .on 'all', (event, path) ->
     info "Change detected in '#path'..."
     process.exit!
-co task ...mix.task[((task-module[camelize mix.task.1.to-string!] and 2) or 1) til mix.task.length]
+
+co task ...(mix.task.1 and mix.task[((task-module[camelize mix.task.1.to-string!] and 2) or 1) til mix.task.length] or [])
 .catch ->
   error (it.stack or it)
