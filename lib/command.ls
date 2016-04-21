@@ -24,6 +24,8 @@ process <<< child_process
 global  <<< console
 global  <<< prelude-ls
 
+bluebird.config { +long-stack-traces }
+
 global <<< do
   co:            co
   fs:            fs <<< { path: path }
@@ -37,6 +39,7 @@ global <<< do
   promisify-all: bluebird.promisify-all
   livescript:    livescript
   watcher:       chokidar
+  compact:       -> pairs-to-obj((obj-to-pairs it) |> filter -> it[1] is not undefined)
 
 global.spin = (line, command) ->*
   spinner = new cli-spinner.Spinner "#line %s"
