@@ -18,12 +18,20 @@ Globally, mix provides the following names:
 - **glob** - https://github.com/isaacs/node-glob
 - **clone** - https://github.com/pvorb/node-clone
 - **Promise** - https://github.com/petkaantonov/bluebird
+- **promise** - alias to `new Promise`
 - **livescript** - https://github.com/gkz/LiveScript
 - **watcher** - https://github.com/paulmillr/chokidar
+- **ex** wraps process.exec in a promise
 - **exec** alias to process.exec-sync
 - **spawn** wraps process.spawn in a promise
 - **color** takes a number from 0-255 and a string and produces an xterm256 string
 - **debounce** takes a time in milliseconds, and a function, and returns a debounced function
+- **spin** takes a log line and a command that will be executed with a spinner until it is completed
+
+
+###### notes
+`prelude-ls` is imported into global.
+`Obj.compact` is redefined to reject only undefined properties.
 
 #### usage
 
@@ -44,6 +52,8 @@ mix will search for `task/ip.ls`, compile it into a module, and run the `encode`
 Note that any functions defined in a task module will be yielded, thus they must be a generator or return a promise.
 
 Options are also supported.  Thus adding `--myopt foo` will place the string value `"foo"` in the property `mix.option.myopt`.
+
+Arguments that aren't options are passed to the called task function.
 
 #### configuration
 
