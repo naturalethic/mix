@@ -21,10 +21,13 @@ require! \module
 process <<< child_process
 global  <<< prelude-ls
 
-if console.log.apply
-  <[ log info warn error ]> |> each (key) -> window[key] = -> console[key] ...&
+if window?
+  if console.log.apply
+    <[ log info warn error ]> |> each (key) -> window[key] = -> console[key] ...&
+  else
+    <[ log info warn error ]> |> each (key) -> window[key] = console[key]
 else
-  <[ log info warn error ]> |> each (key) -> window[key] = console[key]
+  global <<< console{log, info, warn, error}
 
 bluebird.config { +long-stack-traces }
 
