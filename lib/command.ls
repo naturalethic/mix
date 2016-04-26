@@ -12,17 +12,19 @@ require! \node-uuid
 require! \livescript
 require! \cli-spinner
 require! \bluebird
-Module = (require \module).Module
+require! \module
 
 # -----------------------------------------------------------------------------
 # Global assignments.  Please keep all global assignments within this area.
 # -----------------------------------------------------------------------------
 
-array-replace = (it, a, b) -> index = it.index-of(a); it.splice(index, 1, b) if index > -1; it
-
 process <<< child_process
-global  <<< console
 global  <<< prelude-ls
+
+if console.log.apply
+  <[ log info warn error ]> |> each (key) -> window[key] = -> console[key] ...&
+else
+  <[ log info warn error ]> |> each (key) -> window[key] = console[key]
 
 bluebird.config { +long-stack-traces }
 
@@ -39,6 +41,7 @@ global <<< do
   promisify-all: bluebird.promisify-all
   livescript:    livescript
   watcher:       chokidar
+  pathify:       -> module.global-paths.push it
 
 Obj.compact = -> pairs-to-obj((obj-to-pairs it) |> filter -> it[1] is not undefined)
 
@@ -109,6 +112,8 @@ global.debounce = ->
 # End global assignments.
 # -----------------------------------------------------------------------------
 
+array-replace = (it, a, b) -> index = it.index-of(a); it.splice(index, 1, b) if index > -1; it
+
 export run = ->
   # Load plugin and project tasks.  Project tasks will mask plugins of the same name.
   task-modules = pairs-to-obj (((glob.sync "#{process.cwd!}/node_modules/mix*/task/*") ++ glob.sync("#{process.cwd!}/task/*")) |> map ->
@@ -124,7 +129,7 @@ export run = ->
     keys task-modules |> each -> info "  #it"
     process.exit!
 
-  task-module = new Module
+  task-module = new module.Module
   task-module.paths = [ "#{process.cwd!}/node_modules", "#{process.cwd!}/lib", "#__dirname/../lib" ]
   task-module.paths.push "#__dirname/../node_modules" if fs.exists-sync "#__dirname/../node_modules"
   task-module._compile (livescript.compile ([

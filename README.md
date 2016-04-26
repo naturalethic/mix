@@ -27,7 +27,7 @@ Globally, mix provides the following names:
 - **color** takes a number from 0-255 and a string and produces an xterm256 string
 - **debounce** takes a time in milliseconds, and a function, and returns a debounced function
 - **spin** takes a log line and a command that will be executed with a spinner until it is completed
-
+- **pathify** add a path NODE_PATH
 
 ###### notes
 `prelude-ls` is imported into global.
