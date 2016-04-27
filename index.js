@@ -1,2 +1,2 @@
 require('livescript');
-require('./lib/command');
+module.exports = require('./lib/command');

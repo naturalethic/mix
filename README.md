@@ -34,7 +34,6 @@ Globally, mix provides the following names:
 `Obj.compact` is redefined to reject only undefined properties.
 
 #### usage
-
 Mix looks in the current directory for a folder called `task`.  Tasks are written in LiveScript.  Each file in the task folder refers to a top level task.  Consider a file call `task/ip.ls` with the following code:
 ```
 export encode = ->*
