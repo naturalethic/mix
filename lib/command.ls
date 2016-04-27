@@ -48,6 +48,8 @@ export init = ->
     watcher:       chokidar
     pathify:       -> Module.global-paths.push it
 
+  pathify fs.realpath-sync "#project-root/lib"
+
   Obj.compact = -> pairs-to-obj((obj-to-pairs it) |> filter -> it[1] is not undefined)
 
   global.spin = (line, command) ->*
