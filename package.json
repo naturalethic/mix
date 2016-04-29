@@ -10,6 +10,8 @@
   "files": [
     "lib",
     "bin"
+    "run.js"
+    "index.js"
   ],
   "repository": {
     "type": "git",
