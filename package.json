@@ -9,8 +9,8 @@
   },
   "files": [
     "lib",
-    "bin"
-    "run.js"
+    "bin",
+    "run.js",
     "index.js"
   ],
   "repository": {
