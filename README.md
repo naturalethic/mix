@@ -62,3 +62,12 @@ Mix will load any `mix.ls` file sitting in project folder and set it to `mix.con
 
 Mix tasks will be compiled with a node path that includes `./lib`.  It also will search your standard node path heirarchy.
 
+#### daemonization
+
+If you want to daemonize your task, call it with `start`.
+
+```
+$ mix start <task>
+$ mix stop <task>
+```
+
