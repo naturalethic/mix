@@ -13,17 +13,20 @@ require! \livescript
 require! \cli-spinner
 require! \bluebird
 require! \module : Module
+require! \daemonize2
+
+daemon-action = null
 
 # -----------------------------------------------------------------------------
 # Initialization and setting of all globals
 # -----------------------------------------------------------------------------
 export init = ->
-  global.project-root = it or process.cwd!
-
   process <<< child_process
   global  <<< prelude-ls
-
-  if window?
+  if (process.argv.index-of '--daemon') >= 0
+    log = fs.open-sync 'mix.log', 'a+'
+    <[ log info warn error ]> |> each (key) -> global[key] = -> fs.write log, (& * ' '); fs.write log, '\n'
+  else if window?
     if console.log.apply
       <[ log info warn error ]> |> each (key) -> window[key] = -> console[key] ...&
     else
@@ -47,8 +50,6 @@ export init = ->
     livescript:    livescript
     watcher:       chokidar
     pathify:       -> Module.global-paths.push it
-
-  pathify fs.realpath-sync "#project-root/lib"
 
   Obj.compact = -> pairs-to-obj((obj-to-pairs it) |> filter -> it[1] is not undefined)
 
@@ -85,6 +86,13 @@ export init = ->
       color: true
     task:   [last((delete optimist.argv.$0).split ' ')] ++ delete optimist.argv._
     option: pairs-to-obj(obj-to-pairs(optimist.argv) |> map -> [camelize(it[0]), it[1]])
+
+  global.project-root = it or mix.option.project-root or process.cwd!
+
+  pathify fs.realpath-sync "#project-root/lib"
+
+  if mix.task.0 in <[ start stop ]>
+    daemon-action := mix.task.shift!
 
   if fs.exists-sync (config-path = "#{project-root}/mix.ls")
     extend mix.config, require config-path
@@ -128,6 +136,9 @@ export run = ->
     [ (camelize fs.path.basename(it).replace //#{fs.path.extname it}$//, ''), it ]
   )
 
+  if (process.argv.index-of '--daemon') >= 0
+    mix.task.shift!
+
   # Print list of tasks if none given, or task does not exist.
   if !mix.task.0 or !task-modules[camelize mix.task.0]
     if !(keys task-modules).length
@@ -151,6 +162,18 @@ export run = ->
     keys task-module
     |> filter -> it != camelize mix.task.0
     |> each -> info "  #{dasherize it}"
+    process.exit!
+
+  if daemon-action
+    daemon = daemonize2.setup do
+      main:    "#__dirname/../run.js"
+      name:    "MIX: #{project-root} [#{mix.task.0}]"
+      pidfile: "/tmp/mix-#{fs.path.basename project-root}-#{mix.task.0}.pid"
+      argv:    process.argv.slice(2) ++ [ '--daemon' ]
+      cwd:     project-root
+    daemon.on \error, ->
+      info ...&
+    daemon[daemon-action]!
     process.exit!
 
   # Provide watch capability to all tasks.
