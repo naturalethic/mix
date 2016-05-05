@@ -123,6 +123,7 @@ export init = ->
         timeout := null
         func.apply this, args
       ), wait
+  this <<< mix
   this
 
 # -----------------------------------------------------------------------------
