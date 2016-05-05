@@ -90,6 +90,7 @@ export init = ->
   global.project-root = it or mix.option.project-root or process.cwd!
 
   pathify fs.realpath-sync "#project-root/lib"
+  pathify fs.realpath-sync "#project-root/node_modules"
 
   if mix.task.0 in <[ start stop ]>
     daemon-action := mix.task.shift!
