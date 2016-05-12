@@ -104,6 +104,8 @@ export init = ->
   if fs.exists-sync (host-path = "#{project-root}/host.ls")
     extend mix.config, require host-path
 
+  mix.config = recycle mix.config
+
   global.color = (c, v) -> (mix.config.color and "\x1b[38;5;#{c}m#{v}\x1b[0m") or v
 
   global.debounce = ->
