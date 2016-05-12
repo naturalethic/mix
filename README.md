@@ -28,6 +28,8 @@ Globally, mix provides the following names:
 - **debounce** takes a time in milliseconds, and a function, and returns a debounced function
 - **spin** takes a log line and a command that will be executed with a spinner until it is completed
 - **pathify** add a path NODE_PATH
+- **decycle** replace circular references in an object with $ref paths
+- **recycle** replace $ref paths in an object and replace them with references
 
 ###### notes
 `prelude-ls` is imported into global.

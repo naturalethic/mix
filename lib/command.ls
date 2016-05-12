@@ -14,6 +14,7 @@ require! \cli-spinner
 require! \bluebird
 require! \module : Module
 require! \daemonize2
+require! './cycle'
 
 daemon-action = null
 
@@ -50,6 +51,8 @@ export init = ->
     livescript:    livescript
     watcher:       chokidar
     pathify:       -> Module.global-paths.push it
+
+  global <<< cycle
 
   Obj.compact = -> pairs-to-obj((obj-to-pairs it) |> filter -> it[1] is not undefined)
 
