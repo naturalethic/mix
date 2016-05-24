@@ -90,6 +90,8 @@ export init = ->
     task:   [last((delete optimist.argv.$0).split ' ')] ++ delete optimist.argv._
     option: pairs-to-obj(obj-to-pairs(optimist.argv) |> map -> [camelize(it[0]), it[1]])
 
+  mix.task.shift! if mix.task.0 is './node_modules/mix/run.js'
+
   global.project-root = it or mix.option.project-root or process.cwd!
 
   pathify fs.realpath-sync "#project-root/lib" if fs.exists-sync "#project-root/lib"
