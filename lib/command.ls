@@ -196,6 +196,9 @@ export run = ->
         if child.error
           info child.error
           process.exit!
+        if child.signal == 'SIGINT'
+          info 'old, bro.'
+          process.exit!
   else if mix.option.supervised
     watcher.watch (task-module.watch or []), persistent: true, ignore-initial: true .on 'all', (event, path) ->
       info "Change detected in '#path'..."
